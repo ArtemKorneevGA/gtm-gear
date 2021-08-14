@@ -1,0 +1,14 @@
+{
+  "container": [
+    {
+      "path": "accounts/6004604474/containers/49973052",
+      "accountId": "6004604474",
+      "containerId": "49973052",
+      "name": ".empty_web",
+      "publicId": "GTM-T57NB3S",
+      "usageContext": ["web"],
+      "fingerprint": "1627061404079",
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6004604474/containers/49973052/workspaces?apiLink=container"
+    }
+  ]
+}
