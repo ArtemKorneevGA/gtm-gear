@@ -2,7 +2,7 @@
   <h1 align="center">⚙️ gtm-gear</h1>
 
   <p align="center">    
-    Automate evreday Google Tag Manager tasks.
+    Automate everyday Google Tag Manager tasks.
     <br />
   </p>
 </p>
@@ -17,7 +17,7 @@ Or if you have base set up for GA/GAds/DV360/Facebook/... you can once save it a
 _Project is still in work the current version is 0.1_
 
  **Main scenarios 🔥:** 
-- Get tags, triggers, variables, buit in variables, folder by API;
+- Get tags, triggers, variables, built in variables, folders by API;
 - Cache all data to reduce amount of requests;
 - Limit request rate to 25 by 100 seconds as its default limit for GTM API;
 - Update params you need;
@@ -60,7 +60,7 @@ To get a local copy up and running follow these simple steps.
 3. ### Get credentials for GTM API
 
    
-   Folow steps from the [documentation](https://developers.google.com/tag-manager/api/v2/authorization)
+   Follow steps from the [documentation](https://developers.google.com/tag-manager/api/v2/authorization)
    
 
 4. ### Set path to credentials
