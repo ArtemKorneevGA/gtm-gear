@@ -37,6 +37,17 @@ class Tag(Entity):
         if self.data.get("blockingTriggerId"):
             self.blocking_triggers = self.data["blockingTriggerId"]
  
+    def get_ua_type(self):
+        for param in self.parameter:
+            if param["type"] == "template" and param["key"] == "trackType":
+                return param["value"]
+ 
+    def is_ua_ecommerce(self):
+        for param in self.parameter:
+            if param["type"] == "boolean" and param["key"] == "enableEcommerce":
+                return True if param["value"] == 'true' else False     
+        return False
+
     def set_html(self, value):
         for param in self.parameter:
             if param["type"] == "template" and param["key"] == "html":

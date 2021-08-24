@@ -52,7 +52,7 @@ class Workspace():
         
         self.workspaces = []
         self.entity_type = 'workspace'
-        self.get_entities = self.get_workspaces
+        self.get_entities = container.get_workspaces
         self.workspaces = self.service.get_cache(
             {
                 "path": os.path.join(str(self.container['accountId']), self.gtm_key,workspace_name),
@@ -82,14 +82,7 @@ class Workspace():
         logger.info('Worspace inited')
 
 
-    def get_workspaces(self):
-        return (
-            self.service.execute(self.gtmservice.accounts()
-            .containers()
-            .workspaces()            
-            .list(parent=self.container["path"])
-            )
-        )
+
 
   
 

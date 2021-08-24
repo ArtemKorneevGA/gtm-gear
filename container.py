@@ -44,6 +44,19 @@ class Container():
         )
         return result
 
+    def get_workspaces(self):
+        return (
+            self.service.execute(self.gtmservice.accounts()
+            .containers()
+            .workspaces()            
+            .list(parent=self.container["path"])
+            )
+        )
+
+    def get_workspace_by_name(self,name):
+        workspace = self.get_workspaces()
+        return [w for w in workspace['workspace'] if w['name']==name]
+
     def get_by_gtm_key(self):
         for container in self.containers["container"]:
             if container["publicId"] == self.gtm_key:
