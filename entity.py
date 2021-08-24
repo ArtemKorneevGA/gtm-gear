@@ -15,6 +15,7 @@ class Entity():
         self.parent = parent
         self.data = data
         self.name = data.get("name")
+        self.type = data.get("type")
         self.path = data.get("path")
         self.parameter = data.get("parameter")
 
@@ -24,7 +25,7 @@ class Entity():
         self.dependency_check_id = data.get("name")
         self.dependent_variables = []
         self.dependent_built_in_variables = []
-        dependent_variables = re.findall("{{([A-Za-z0-9-_\s\.]+)}}", json.dumps(self.data))
+        dependent_variables = re.findall("{{([A-Za-z0-9-_\s\.\/]+)}}", json.dumps(self.data))
 
         if len(dependent_variables) > 0:
             for variable in dependent_variables:
@@ -38,15 +39,8 @@ class Entity():
 
 
     def update(self):
-        (self.service.execute(self.gtmservice.accounts()
-        .containers()
-        .workspaces()
-        .tags()
-        .update(
-            path=self.path,
-            body=self.data,
-        )
-        ))
+        self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), self.entity_type)().update(path=self.path,body=self.data,))
+
         self.parent.update_cache(self.entity_type)         
 
     def delete(self):
@@ -60,3 +54,8 @@ class Entity():
     
     def get_depended(self):
         return self.parent.get_depended(self.entity_type, self.dependency_check_id, self.depended_checks)
+
+    def get_template_name(self):
+        for param in self.parameter:
+            if param["type"] == "template" and param["key"] == "name":
+                return param["value"]
