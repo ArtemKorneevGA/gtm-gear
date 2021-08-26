@@ -64,6 +64,17 @@ class Service:
     def get_cache(self, entity, cache = True):
         return self.cache.get_cache(entity, cache)
 
+
+    def is_workspace_changed(self, workspace, entity_path):
+        cache_file_path = self.cache.get_cache_file_path('workspace',entity_path)
+        cache_file_folder = self.cache.get_cache_file_folder(entity_path)
+
+        workspace_cache = self.cache.get_cache_file(cache_file_path)
+        if workspace_cache and workspace_cache['fingerprint'] == workspace['fingerprint']:
+            return True
+        self.cache.save(cache_file_folder, cache_file_path, workspace)        
+        return False
+
     def update_cache(self, entity_type, entity_path, data):
         self.cache.update_cache(entity_type, entity_path, data)
 

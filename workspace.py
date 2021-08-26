@@ -46,7 +46,7 @@ ENTITY_TYPES = list(ENTITY_CONFIG.keys())
 
 
 class Workspace():
-    def __init__(self, container, workspace_name="Default Workspace", cache=True, deps=['tags', 'triggers', 'variables', 'built_in_variables', 'folders', 'dependencies_for_tags', 'dependencies_for_triggers']):
+    def __init__(self, container, workspace_name="Default Workspace", cache=True):
         self.service = container.service
         self.gtmservice = container.gtmservice
 
@@ -58,15 +58,17 @@ class Workspace():
         self.workspaces = []
         self.entity_type = 'workspace'
         self.get_entities = container.get_workspaces
-        self.workspaces = self.service.get_cache(
-            {
-                "path": os.path.join(str(self.container['accountId']), self.gtm_key, workspace_name),
-                "type": self.entity_type,
-                "get": self.get_entities
-            }, cache
-        )
+        # Always get workspaces to check if they changed
+        self.workspaces = self.get_entities()
+
 
         self.workspace = self.get_by_name()
+
+        # If workspace change can't use cached version - need reload all entities
+        if not self.service.is_workspace_changed(self.workspace, os.path.join(str(self.container['accountId']), self.gtm_key, workspace_name)):
+            logger.info("Workspace change can't use cached version - need reload all entities")
+            self.cache = False
+
         self.path = self.workspace.get("path")
 
         logger.info('workspace ready')
