@@ -16,7 +16,7 @@ class Cache:
 
         self.cache_path_folder = self.get_cache_file_folder(entity_path)
         cache_path_file = self.get_cache_file_path(entity_type, entity_path)
-        
+
         if cache:
             try:
                 result =  self.get(cache_path_file, get_entities) 
@@ -27,7 +27,7 @@ class Cache:
             result = get_entities()
             self.save(self.cache_path_folder , cache_path_file, result)
         if len(result) == 0:
-            raise ValueError(f"No {entity_type}")
+            print(f"No {entity_type}")
         return result
 
 

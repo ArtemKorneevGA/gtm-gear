@@ -42,9 +42,17 @@ class Entity():
         self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), self.entity_type)().update(path=self.path,body=self.data,))
         self.parent.update_cache(self.entity_type)         
 
-    def delete(self):
+    def replace_data_fragment(self, old_text, new_text):
+        try:
+            changed_data = re.sub(old_text, new_text, json.dumps(self.data))
+            self.data = json.loads(changed_data)
+            self.update()
+        except Exception as e:
+            raise ValueError(f"Can't change data for {self.name}: {e}")
+
+    def delete(self, do_check = True):
         depended = self.get_depended()
-        if depended['len']>0:
+        if do_check and depended['len']>0:
             logger.warning(f"Can't delete {self.entity_type} {self.name}: it used in {depended}")
         else:
             self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), self.entity_type)().delete(**{**{'path':self.path},**self.path_additional_params}))
@@ -58,3 +66,4 @@ class Entity():
         for param in self.parameter:
             if param["type"] == "template" and param["key"] == "name":
                 return param["value"]
+    

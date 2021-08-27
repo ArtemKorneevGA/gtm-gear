@@ -1,3 +1,4 @@
+import re
 from built_in_variable import BuiltInVariable
 from folder import Folder
 from variable import Variable
@@ -118,9 +119,10 @@ class Workspace():
 
             object = globals()[ENTITY_CONFIG[entity_type]['className']]
             key = ENTITY_CONFIG[entity_type]['key']
-            setattr(self, entity_type, [object(entity, self)
-                    for entity in entities[key]])
-            logger.info(f"{entity_type} inited")
+            if key in entities.keys():
+                setattr(self, entity_type, [object(entity, self)
+                        for entity in entities[key]])
+                logger.info(f"{entity_type} inited")
 
     def get_tag(self, tag_name):
         for tag in self.tags:
@@ -163,9 +165,29 @@ class Workspace():
 
     def check_entity(self, entity_type):
         if entity_type not in ENTITY_TYPES:
-            raise ValueError(f"Can't update cach for entity: {entity_type}")
+            raise ValueError(f"Can't update cache for entity: {entity_type}")
+  
 
 
-    def create_folder(self, name):
-        self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), 'folders')().create(parent=self.path,body={'name':name}))
-        self.update_cache('folders')   
+    def create_entity(self, entity_type, data):
+        if entity_type not in ENTITY_CONFIG.keys():
+            raise ValueError(f"Can't create entity by type: {entity_type}")
+
+        entity = self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), entity_type)().create(parent=self.path,body=data))
+        logger.info(f"{entity_type} added: {data['name']}")
+        object = globals()[ENTITY_CONFIG[entity_type]['className']]
+        entity_object = object(entity, self)
+        
+        entities = getattr(self, entity_type)
+        entities.append(entity_object)
+
+        setattr(self, entity_type, entities)
+        
+        self.update_cache(entity_type)   
+        
+        return entity_object
+
+    def get_entity(self, entity_type, name):
+        entities = getattr(self, entity_type)
+        entity = [entity for entity in entities if entity.name==name]
+        return entity[0] if len(entity)>0 else None

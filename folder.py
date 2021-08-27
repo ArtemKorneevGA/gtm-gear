@@ -14,3 +14,6 @@ class Folder(Entity):
             'triggers':[],
             'variables':[],
         }
+
+    def get_id(self):
+        return self.data['folderId']
