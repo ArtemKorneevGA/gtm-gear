@@ -42,24 +42,28 @@ class Entity():
         self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), self.entity_type)().update(path=self.path,body=self.data,))
         self.parent.update_cache(self.entity_type)         
 
-    def replace_data_fragment(self, old_text, new_text):
+    def replace_data_fragment(self, old_text, new_text, api_update=True):
         try:
             changed_data = re.sub(old_text, new_text, json.dumps(self.data))
             self.data = json.loads(changed_data)
-            self.update()
+            if api_update:
+                self.update()
+            else:
+               self.parent.update_cache(self.entity_type)  
         except Exception as e:
             raise ValueError(f"Can't change data for {self.name}: {e}")
 
-    def rename_references(self, new_name, old_name):
+    def rename_references(self, new_name, old_name, api_update=True):
         dependencies = self.get_depended()
         if dependencies['len']>0:
             for entity_type in dependencies.keys():
                 if entity_type == 'len':
                     continue
-                for entity_name in dependencies[entity_type][f"dependent_{self.entity_type}"]:
-                    entity = self.parent.get_entity(entity_type, entity_name)
-                    entity.replace_data_fragment(f"{{{{{old_name}}}}}", f"{{{{{new_name}}}}}")
-                    logger.info(f"Modifed {entity_type} {entity_name}")
+                if f"dependent_{self.entity_type}" in dependencies[entity_type].keys():
+                    for entity_name in dependencies[entity_type][f"dependent_{self.entity_type}"]:
+                        entity = self.parent.get_entity(entity_type, entity_name)
+                        entity.replace_data_fragment(f"{{{{{old_name}}}}}", f"{{{{{new_name}}}}}",api_update)
+                        logger.info(f"Modifed {entity_type} {entity_name}")
 
 
     def delete(self, do_check = True):
