@@ -50,6 +50,17 @@ class Entity():
         except Exception as e:
             raise ValueError(f"Can't change data for {self.name}: {e}")
 
+    def rename_references(self, new_name, old_name):
+        dependencies = self.get_depended()
+        for entity_type in dependencies.keys():
+            if entity_type == 'len':
+                continue
+            for entity_name in dependencies[entity_type][f"dependent_{self.entity_type}"]:
+                entity = self.parent.get_entity(entity_type, entity_name)
+                entity.replace_data_fragment(f"{{{{{old_name}}}}}", f"{{{{{new_name}}}}}")
+                logger.info(f"Modifed {entity_type} {entity_name}")
+
+
     def delete(self, do_check = True):
         depended = self.get_depended()
         if do_check and depended['len']>0:
