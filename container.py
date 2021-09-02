@@ -1,5 +1,5 @@
-from service import Service
 import os
+from version import Version
 
 from apiclient.discovery import build
 from oauth2client import client
@@ -22,6 +22,9 @@ class Container():
         self.containers = []
         self.entity_type = 'container'
         self.get_entities = self.get_containers
+
+        self.versions_headers = {}
+        self.versions = []
 
         self.containers = self.service.get_cache(
             {
@@ -70,3 +73,28 @@ class Container():
             ))
         except:
             raise Exception("Can not create workspace: '{}'".format(name))
+
+    def init_versions(self):
+        self.versions_headers = self.get_versions_list()
+        self.versions = [Version(self, version['path']) for version in self.versions_headers['containerVersionHeader']]
+
+    def get_versions_stat(self):
+        stat = []
+        self.init_versions()
+        for version in self.versions:
+            version.init()
+        for version_num in range(1,len(self.versions)):
+             version_stat = self.versions[version_num].compare(self.versions[version_num-1])
+             stat.append(version_stat)
+        return stat
+
+    def get_versions_list(self):
+        return (self.service.execute(getattr(self.gtmservice.accounts().containers(), 'version_headers')()
+                .list(parent=self.container["path"])
+        ))
+
+    def get_versions(self, version_path):
+        return (self.service.execute(getattr(self.gtmservice.accounts().containers(), 'versions')()
+                .get(path=version_path)
+        ))
+
