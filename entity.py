@@ -82,4 +82,22 @@ class Entity():
         for param in self.parameter:
             if param["type"] == "template" and param["key"] == "name":
                 return param["value"]
+
+    def get_param(self, param_key, param_type='template'):
+        for param in self.parameter:
+            if param["type"] == param_type and param["key"] == param_key:
+                return param["list"] if param_type == 'list' else param["value"]
     
+    def get_template_param(self, param_name):
+        if self.parameter:
+            for param in self.parameter:
+                if param["type"] == "template" and param["key"] == param_name:
+                    return param["value"]
+    
+
+    def set_folder_id(self, folder_id):
+        self.data['parentFolderId']=folder_id
+
+    def set_type(self, type):
+        self.data['type'] = type
+        self.type = type   

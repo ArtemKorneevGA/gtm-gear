@@ -71,4 +71,5 @@ class Cache:
 
 
     def save_file(self, obj, filename):
-        json.dump(obj, open(filename, "w"))
+        with open(filename, 'w') as f:
+            json.dump(obj, f)

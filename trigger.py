@@ -23,3 +23,9 @@ class Trigger(Entity):
                 if parameter['key'] == 'triggerIds':
                     for trigger in parameter['list']:
                         self.triggers_references.append(trigger['value'])
+
+    def get_custom_event_template_param(self, param_name):
+        if 'customEventFilter' in self.data:
+            for param in self.data['customEventFilter'][0]['parameter']:
+                if param["type"] == "template" and param["key"] == param_name:
+                    return param["value"]
