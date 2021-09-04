@@ -78,12 +78,18 @@ class Container():
         self.versions_headers = self.get_versions_list()
         self.versions = [Version(self, version['path']) for version in self.versions_headers['containerVersionHeader']]
 
-    def get_versions_stat(self):
+    def get_versions_stat(self,from_version=None,to_version=None):
         stat = []
         self.init_versions()
-        for version in self.versions:
-            version.init()
-        for version_num in range(1,len(self.versions)):
+
+        from_version = 1 if (from_version is None or from_version>to_version or to_version>len(self.versions)) else from_version
+        to_version = to_version if to_version is not None and (to_version> from_version and from_version<= len(self.versions)) else len(self.versions)
+        
+        for version_num in range(from_version-1,to_version):
+            self.versions[version_num].init()
+  
+
+        for version_num in range(from_version,to_version):
              version_stat = self.versions[version_num].compare(self.versions[version_num-1])
              stat.append(version_stat)
         return stat

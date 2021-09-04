@@ -26,7 +26,7 @@ class Version():
 
         logger.info(f"Start to compare {self.get_id()} and {version.get_id()}")
 
-        version_old = version.data
+        version_old = dict(version.data)
         version_new =  self.data
 
  
@@ -69,6 +69,8 @@ class Version():
                         entity["change_type"] = "added"
 
                     else:
+                        if 'change_type' in old_entities[0].keys():
+                            del old_entities[0]['change_type']
                         if entity != old_entities[0]:
                             self.changes['changed'][entity_type]+=1
                             self.changes['changed']['total']+=1
@@ -86,7 +88,8 @@ class Version():
 
         return {
                 "last_change_date" : datetime.fromtimestamp(int(self.data['fingerprint'])/1000),
-                "changes_amount": self.changes['total']
+                "changes_amount": self.changes['total'],
+                "version_id": self.data['containerVersionId']
             }
 
 
