@@ -13,7 +13,7 @@ from cache import Cache
 import logging
 logger = logging.getLogger(__name__)
 
-REQUESTS_PER_PERIOD = 15
+REQUESTS_PER_PERIOD = 60
 REQUESTS_PERIOD = 60
 SLEEP_TIME_DEFAULT = 6
 

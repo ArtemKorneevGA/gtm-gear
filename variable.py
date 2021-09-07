@@ -14,3 +14,11 @@ class Variable(Entity):
             'triggers':['dependent_variables'],
             'variables':['dependent_variables'],
         }
+
+    @staticmethod
+    def create_constant(name):
+        return {
+            'name': f"{name}",
+            'type': 'c',
+            'parameter': [{'type': 'template', 'key': 'value', 'value': f"{name}"}],
+        }

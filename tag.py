@@ -12,8 +12,9 @@ class Tag(Entity):
         self.blocking_triggers = []
         self.setup_tags = []
         self.teardown_tags = []
+        self.measurement_id_tags = []
         self.depended_checks = {
-            'tags':['setup_tags','teardown_tags']
+            'tags':['setup_tags','teardown_tags', 'measurement_id_tags']
         }
         
         self.get_dependencies()
@@ -36,6 +37,12 @@ class Tag(Entity):
  
         if self.data.get("blockingTriggerId"):
             self.blocking_triggers = self.data["blockingTriggerId"]
+
+        if self.data['type']=='gaawe':
+            measurement_id_tag_name = self.get_param('measurementId','tagReference')
+            if measurement_id_tag_name is not None:
+                self.measurement_id_tags = [measurement_id_tag_name]
+            # measurementId
  
     def get_ua_type(self):
         for param in self.parameter:
