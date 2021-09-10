@@ -47,7 +47,7 @@ To get a local copy up and running follow these simple steps.
 2. ### Enter in
 
    ```sh
-   npm install
+   source .venv/bin/activate
 
    ```
 
