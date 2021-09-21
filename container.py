@@ -37,15 +37,7 @@ class Container():
         logger.info('Container ready')
 
     def get_containers(self):
-        logger.info('get_containers')
-        account_path = "accounts/{}".format(self.account_id)
-        result = (
-            self.service.execute(self.gtmservice.accounts()
-                         .containers()
-                         .list(parent=account_path)
-                         )
-        )
-        return result
+        return self.service.get_containers(self.account_id)
 
     def get_workspaces(self):
         return (

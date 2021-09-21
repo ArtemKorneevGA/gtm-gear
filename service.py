@@ -65,6 +65,25 @@ class Service:
         return self.cache.get_cache(entity, cache)
 
 
+    def get_accounts(self):
+        logger.info('get_accounts')
+        result = (
+            self.execute(self.gtmservice.accounts().list()                       )
+        )
+        return result
+
+    def get_containers(self, account_id):
+        logger.info('get_containers')
+        account_path = "accounts/{}".format(account_id)
+        result = (
+            self.execute(self.gtmservice.accounts()
+                         .containers()
+                         .list(parent=account_path)
+                         )
+        )
+        return result
+
+
     def is_workspace_changed(self, workspace, entity_path):
         cache_file_path = self.cache.get_cache_file_path('workspace',entity_path)
         cache_file_folder = self.cache.get_cache_file_folder(entity_path)
