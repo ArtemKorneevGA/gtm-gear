@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from entity import Entity
+from .entity import Entity
 
 class Trigger(Entity):
     def __init__(self, data, parent):

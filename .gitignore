@@ -1,9 +1,6 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-/tasks
 /.pytest_cache
 /__pycache__
 *.pyc
-
-# misc
+venv/
 .DS_Store
 

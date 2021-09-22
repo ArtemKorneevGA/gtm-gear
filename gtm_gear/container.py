@@ -1,10 +1,5 @@
 import os
-from version import Version
-
-from apiclient.discovery import build
-from oauth2client import client
-from oauth2client import file
-from oauth2client import tools
+from .version import Version
 
 
 import logging

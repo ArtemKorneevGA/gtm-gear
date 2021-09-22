@@ -1,5 +1,5 @@
-from entity import Entity
-from utils import camel_case
+from .entity import Entity
+from .utils import camel_case
 import logging
 logger = logging.getLogger(__name__)
 

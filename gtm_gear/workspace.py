@@ -1,19 +1,14 @@
 import re
-from built_in_variable import BuiltInVariable
-from folder import Folder
-from variable import Variable
-from trigger import Trigger
-from tag import Tag
-from container import Container
-from service import Service
+from .built_in_variable import BuiltInVariable
+from .folder import Folder
+from .variable import Variable
+from .trigger import Trigger
+from .tag import Tag
+from .container import Container
 import os
 import sys
 import json
 
-from apiclient.discovery import build
-from oauth2client import client
-from oauth2client import file
-from oauth2client import tools
 
 from datetime import date, timedelta
 from time import sleep

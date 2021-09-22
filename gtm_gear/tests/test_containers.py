@@ -19,8 +19,8 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 
-from service import Service
-from container import Container
+from .service import Service
+from .container import Container
 
 from googleapiclient.http import RequestMockBuilder
 from googleapiclient.http import HttpMock

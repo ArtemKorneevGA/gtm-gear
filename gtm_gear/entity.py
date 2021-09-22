@@ -1,7 +1,6 @@
 import logging, time, json, re
 logger = logging.getLogger(__name__)
 
-from service import Service
 
 # https://support.google.com/tagmanager/answer/7182738?hl=en
 # Array.from(str).map( s => s.innerText)

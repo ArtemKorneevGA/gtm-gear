@@ -8,7 +8,7 @@ from oauth2client import tools
 
 from ratelimit import limits, sleep_and_retry
 
-from cache import Cache
+from .cache import Cache
 
 import logging
 logger = logging.getLogger(__name__)
