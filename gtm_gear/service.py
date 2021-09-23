@@ -6,6 +6,10 @@ from oauth2client import client
 from oauth2client import file
 from oauth2client import tools
 
+import google.oauth2.credentials
+import googleapiclient.discovery
+
+
 from ratelimit import limits, sleep_and_retry
 
 from .cache import Cache
@@ -18,29 +22,46 @@ REQUESTS_PERIOD = 60
 SLEEP_TIME_DEFAULT = 6
 
 class Service:
-    def __init__(self, http = None):
+    def __init__(self, credentials= None, http = None):
         if "GTM_API_CONFIG_FOLDER" in os.environ:
             self.config_folder = os.environ["GTM_API_CONFIG_FOLDER"]
         else:
-            self.config_folder = "../configs"
+            self.config_folder = "./"
 
         self.api_name = "tagmanager"
         self.api_version = "v2"
         self.scope = [
             "https://www.googleapis.com/auth/tagmanager.edit.containers"
         ]
-        self.client_secrets_path = os.path.join(
-            self.config_folder, "client_secrets.json"
-        )
-        self.sleep_time = SLEEP_TIME_DEFAULT
-        self.repository_path = os.path.join(
-            self.config_folder, "repository_path"
-        )
-        self.file_extension = "json"
-        self.storage_path = os.path.join(self.config_folder, "tagmanager.dat")
-        self.http = http
-        self.gtmservice = self.getService()
+
+        if credentials is None:
+            self.client_secrets_path = os.path.join(
+                self.config_folder, "client_secrets.json"
+            )
+            self.sleep_time = SLEEP_TIME_DEFAULT
+            self.repository_path = os.path.join(
+                self.config_folder, "repository_path"
+            )
+            self.file_extension = "json"
+            self.storage_path = os.path.join(self.config_folder, "tagmanager.dat")
+            self.http = http
+            self.gtmservice = self.getService()
+        
+        else:
+            # Load credentials from the session.
+            credentials = google.oauth2.credentials.Credentials(
+                **credentials
+            )
+
+            self.gtmservice  = googleapiclient.discovery.build(
+                self.api_name, self.api_version, credentials=credentials
+            )
+
         self.cache = Cache(self.config_folder)
+
+
+
+
 
     def getService(self):
         if not self.http:

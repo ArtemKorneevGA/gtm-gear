@@ -51,10 +51,10 @@ To get a local copy up and running follow these simple steps.
 
    ```
 
-3. ### Install requirements
+3. ### Install module
 
    ```sh
-   python -m pip install -r requirements.txt
+   pip install git+https://github.com/ArtemKorneevGA/gtm-gear.git
    ```
 
 3. ### Get credentials for GTM API
