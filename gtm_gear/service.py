@@ -22,12 +22,13 @@ REQUESTS_PERIOD = 60
 SLEEP_TIME_DEFAULT = 6
 
 class Service:
-    def __init__(self, credentials= None, http = None):
+    def __init__(self, credentials= None, cache_prefix='', http = None):
         if "GTM_API_CONFIG_FOLDER" in os.environ:
             self.config_folder = os.environ["GTM_API_CONFIG_FOLDER"]
         else:
             self.config_folder = "./"
 
+        self.cache_prefix = cache_prefix
         self.api_name = "tagmanager"
         self.api_version = "v2"
         self.scope = [
@@ -57,7 +58,7 @@ class Service:
                 self.api_name, self.api_version, credentials=credentials
             )
 
-        self.cache = Cache(self.config_folder)
+        self.cache = Cache(self.config_folder, self.cache_prefix)
 
 
 
@@ -86,21 +87,46 @@ class Service:
         return self.cache.get_cache(entity, cache)
 
 
-    def get_accounts(self):
-        logger.info('get_accounts')
-        result = (
-            self.execute(self.gtmservice.accounts().list()                       )
+    def get_accounts(self,cache =True):
+        def requests_accounts(service):
+            result = (
+            self.execute(service.gtmservice.accounts().list()                       )
+            )
+            return result
+
+        def get_entities():
+            return requests_accounts(self)
+
+        result = self.get_cache(
+            {
+                "path": '',
+                "type": 'account',
+                "get": get_entities
+            }, cache
         )
         return result
 
-    def get_containers(self, account_id):
-        logger.info('get_containers')
-        account_path = "accounts/{}".format(account_id)
-        result = (
-            self.execute(self.gtmservice.accounts()
-                         .containers()
-                         .list(parent=account_path)
-                         )
+
+    def get_containers(self, account_id, cache=True):
+        def requests_containers(service, account_id):
+            account_path = "accounts/{}".format(account_id)
+            result = (
+                service.execute(service.gtmservice.accounts()
+                            .containers()
+                            .list(parent=account_path)
+                            )
+            )
+            return result
+
+        def get_entities():
+            return requests_containers(self, account_id)
+
+        result = self.get_cache(
+            {
+                "path": str(account_id),
+                "type": 'container',
+                "get": get_entities
+            }, cache
         )
         return result
 

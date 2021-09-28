@@ -1,9 +1,9 @@
 import os, json
 
 class Cache:
-    def __init__(self, config_folder):
+    def __init__(self, config_folder, cache_prefix):
         self.config_folder = config_folder
-
+        self.cache_prefix = cache_prefix
 
     def get_cache(self, entity, cache = True):
         entity_type = entity['type'] or None
@@ -16,7 +16,6 @@ class Cache:
 
         self.cache_path_folder = self.get_cache_file_folder(entity_path)
         cache_path_file = self.get_cache_file_path(entity_type, entity_path)
-
         if cache:
             try:
                 result =  self.get(cache_path_file, get_entities) 
@@ -33,7 +32,7 @@ class Cache:
 
     def update_cache(self, entity_type, entity_path, data):
         cache_path_file = os.path.join(
-            self.config_folder, 'cache', entity_path, f"{entity_type}.json"
+            self.config_folder, 'cache', self.cache_prefix ,entity_path, f"{entity_type}.json"
         )
         self.save(self.cache_path_folder, cache_path_file, data)
 
@@ -56,12 +55,12 @@ class Cache:
 
     def get_cache_file_folder(self, entity_path):
         return os.path.join(
-            self.config_folder, 'cache', entity_path
+            self.config_folder, 'cache', self.cache_prefix , entity_path
         )
 
     def get_cache_file_path(self, entity_type, entity_path):
         return os.path.join(
-            self.config_folder, 'cache', entity_path, f"{entity_type}.json"
+            self.config_folder, 'cache', self.cache_prefix , entity_path, f"{entity_type}.json"
         )       
 
     def save(self, cache_path_folder, cache_path_file, data):

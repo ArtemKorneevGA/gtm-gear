@@ -23,7 +23,7 @@ class Container():
 
         self.containers = self.service.get_cache(
             {
-                "path": os.path.join(str(account_id), self.gtm_key),
+                "path": str(account_id),
                 "type": self.entity_type,
                 "get": self.get_entities
             }, cache
