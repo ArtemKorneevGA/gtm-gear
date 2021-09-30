@@ -129,7 +129,8 @@ class Workspace():
         entities = getattr(self, entity_type)
         setattr(self, entity_type, [
                 entity for entity in entities if entity.name != entity_name])
-        self.update_cache(entity_type)
+        if self.cache:
+            self.update_cache(entity_type)
 
     def update_cache(self, entity_type):
         self.check_entity(entity_type)
@@ -178,7 +179,8 @@ class Workspace():
 
         setattr(self, entity_type, entities)
         
-        self.update_cache(entity_type)   
+        if self.cache:
+            self.update_cache(entity_type)   
         
         return entity_object
 

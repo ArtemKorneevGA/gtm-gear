@@ -39,7 +39,8 @@ class Entity():
 
     def update(self):
         self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), self.entity_type)().update(path=self.path,body=self.data,))
-        self.parent.update_cache(self.entity_type)         
+        if self.parent.cache:
+            self.parent.update_cache(self.entity_type)         
 
     def replace_data_fragment(self, old_text, new_text, api_update=True):
         try:
@@ -48,7 +49,8 @@ class Entity():
             if api_update:
                 self.update()
             else:
-               self.parent.update_cache(self.entity_type)  
+                if self.parent.cache:
+                    self.parent.update_cache(self.entity_type)  
         except Exception as e:
             raise ValueError(f"Can't change data for {self.name}: {e}")
 
