@@ -21,10 +21,10 @@ class Cache:
                 result =  self.get(cache_path_file, get_entities) 
             except Exception as e:
                 print('Exception', e)
-                pass   
+                result = get_entities()
+                self.save(self.cache_path_folder , cache_path_file, result)
         else:
             result = get_entities()
-            self.save(self.cache_path_folder , cache_path_file, result)
         if len(result) == 0:
             print(f"No {entity_type}")
         return result
