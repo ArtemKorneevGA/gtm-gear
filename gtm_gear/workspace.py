@@ -61,7 +61,7 @@ class Workspace():
         self.workspace = self.get_by_name()
 
         # If workspace change can't use cached version - need reload all entities
-        if not self.service.is_workspace_changed(self.workspace, os.path.join(str(self.container['accountId']), self.gtm_key, workspace_name)):
+        if not self.service.is_workspace_changed(self.workspace, os.path.join(str(self.container['accountId']), self.gtm_key, workspace_name), self.cache):
             logger.info("Workspace change can't use cached version - need reload all entities")
             self.cache = False
 
