@@ -10,6 +10,7 @@ class Container():
     def __init__(self, service, account_id, gtm_key, cache=True):
         self.account_id = account_id
         self.gtm_key = gtm_key
+        self.cache = cache
 
         self.service = service
         self.gtmservice = service.gtmservice
@@ -32,7 +33,7 @@ class Container():
         logger.info('Container ready')
 
     def get_containers(self):
-        return self.service.get_containers(self.account_id)
+        return self.service.get_containers(self.account_id, self.cache )
 
     def get_workspaces(self):
         return (
