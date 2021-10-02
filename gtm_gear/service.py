@@ -17,8 +17,8 @@ from .cache import Cache
 import logging
 logger = logging.getLogger(__name__)
 
-REQUESTS_PER_PERIOD = 60
-REQUESTS_PERIOD = 60
+REQUESTS_PER_PERIOD = 15
+REQUESTS_PERIOD = 100
 SLEEP_TIME_DEFAULT = 6
 
 class Service:
@@ -86,6 +86,11 @@ class Service:
     def get_cache(self, entity, cache = True):
         return self.cache.get_cache(entity, cache)
 
+    def set_ratelimit(self, requests, period):
+        global REQUESTS_PER_PERIOD
+        global REQUESTS_PERIOD
+        REQUESTS_PER_PERIOD = requests
+        REQUESTS_PERIOD = period
 
     def get_accounts(self,cache =True):
         def requests_accounts(service):
