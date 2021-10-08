@@ -111,6 +111,14 @@ class Service:
         )
         return result
 
+    def get_permissions(self,account_id):
+        account_path = "accounts/{}".format(account_id)
+        result = (
+            self.execute(self.gtmservice.accounts().user_permissions().list(parent=account_path)
+            )                     
+        )
+        return result
+  
 
     def get_containers(self, account_id, cache=True):
         def requests_containers(service, account_id):
