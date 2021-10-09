@@ -17,7 +17,7 @@ from .cache import Cache
 import logging
 logger = logging.getLogger(__name__)
 
-REQUESTS_PER_PERIOD = 15
+REQUESTS_PER_PERIOD = 50
 REQUESTS_PERIOD = 100
 SLEEP_TIME_DEFAULT = 6
 
