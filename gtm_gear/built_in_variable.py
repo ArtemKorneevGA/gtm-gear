@@ -15,6 +15,7 @@ class BuiltInVariable(Entity):
         }
         self.param_names = {
             "Click Element":"clickElement", 
+            "Client Name":"clientName", 
             "Click Classes":"clickClasses", 
             "Click ID":"clickId", 
             "Click Target":"clickTarget", 
@@ -23,6 +24,8 @@ class BuiltInVariable(Entity):
             "Error Message":"errorMessage", 
             "Error URL":"errorUrl", 
             "Error Line":"errorLine", 
+            "Event Name":"eventName", 
+            "Event":"event", 
             "Debug Mode":"debugMode", 
             "Form Classes":"formClasses", 
             "Form Element":"formElement", 
@@ -59,6 +62,7 @@ class BuiltInVariable(Entity):
             "Percent Visible":"elementVisibilityRatio", 
             "On-Screen Duration":"elementVisibilityTime"}
 
-
-        # self.path_additional_params = {'type': camel_case(self.name)}
-        self.path_additional_params = {'type': self.param_names[self.name]}
+        if self.name in self.param_names.keys():
+            self.path_additional_params = {'type': self.param_names[self.name]}
+        else:
+            self.path_additional_params = {'type': camel_case(self.name)}
