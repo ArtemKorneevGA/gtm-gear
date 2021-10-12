@@ -66,10 +66,12 @@ class Entity():
                         entity.replace_data_fragment(f"{{{{{old_name}}}}}", f"{{{{{new_name}}}}}",api_update)
                         logger.info(f"Modifed {entity_type} {entity_name}")
                 else: 
-                    for entity_name in  [item for sublist in list(dependencies[entity_type].values()) for item in sublist]:
-                        entity.replace_data_fragment(f"""{old_name}""", f"""{new_name}""",api_update)
-                        # entity.replace_data_fragment(f"'{old_name}'", f"'{new_name}'",api_update)
-                        logger.info(f"Modifed {entity_type} {entity_name}")
+                    for entity_name in [item for sublist in list(dependencies[entity_type].values()) for item in sublist]:
+                        entity = self.parent.get_entity(entity_type, entity_name)
+                        if entity:
+                            entity.replace_data_fragment(f"""{old_name}""", f"""{new_name}""",api_update)
+                            # entity.replace_data_fragment(f"'{old_name}'", f"'{new_name}'",api_update)
+                            logger.info(f"Modifed {entity_type} {entity_name}")
 
 
     def delete(self, do_check = True):
