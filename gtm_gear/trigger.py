@@ -7,6 +7,8 @@ class Trigger(Entity):
     def __init__(self, data, parent):
         Entity.__init__(self, data, parent)
         self.entity_type ='triggers'
+        self.id_name = "triggerId"
+
         self.dependency_check_id = str(data.get("triggerId"))
         self.triggers_references = []
         self.depended_checks = {

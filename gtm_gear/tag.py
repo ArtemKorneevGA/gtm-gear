@@ -7,6 +7,7 @@ class Tag(Entity):
     def __init__(self, data, parent):
         Entity.__init__(self, data, parent)
         self.entity_type ='tags'
+        self.id_name = "tagId"
 
         self.firing_triggers = []
         self.blocking_triggers = []

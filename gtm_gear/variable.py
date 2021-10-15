@@ -8,6 +8,7 @@ class Variable(Entity):
     def __init__(self, data, parent):
         Entity.__init__(self, data, parent)
         self.entity_type ='variables'
+        self.id_name = "variableId"
 
         self.depended_checks = {
             'tags':['dependent_variables'],

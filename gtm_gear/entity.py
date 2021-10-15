@@ -96,6 +96,23 @@ class Entity():
             if param["type"] == param_type and param["key"] == param_key:
                 return param["list"] if param_type == 'list' else param["value"]
     
+    def get_custom_params(self):
+        customParams = self.get_param('customParams','list')
+        params = []
+        if customParams and len(customParams)>0:
+            customParams = [param['map'] for param in customParams]
+            for param in customParams:
+                key = False
+                value = False
+                for p in param:
+                    if p['key'] == 'key':
+                        key = p['value']
+                    if p['key'] == 'value':
+                        value = p['value']
+                if key and value:
+                    params.append({key:value})
+        return params
+                
     def get_template_param(self, param_name):
         if self.parameter:
             for param in self.parameter:
@@ -109,3 +126,6 @@ class Entity():
     def set_type(self, type):
         self.data['type'] = type
         self.type = type   
+
+    def get_id(self):
+        return self.data[self.id_name]
