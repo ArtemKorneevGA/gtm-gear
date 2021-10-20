@@ -55,6 +55,11 @@ class Entity():
             raise ValueError(f"Can't change data for {self.name}: {e}")
 
     def rename_references(self, new_name, old_name, api_update=True):
+        processed = {}
+        processed['tags']=[]
+        processed['variables']=[]
+        processed['triggers']=[]
+
         dependencies = self.get_depended()
         if dependencies['len']>0:
             for entity_type in dependencies.keys():
@@ -62,11 +67,19 @@ class Entity():
                     continue
                 if f"dependent_{self.entity_type}" in dependencies[entity_type].keys():
                     for entity_name in dependencies[entity_type][f"dependent_{self.entity_type}"]:
+                        if entity_name in processed[entity_type]:
+                            continue
+                        processed[entity_type].append(entity_name)
+                        
                         entity = self.parent.get_entity(entity_type, entity_name)
                         entity.replace_data_fragment(f"{{{{{old_name}}}}}", f"{{{{{new_name}}}}}",api_update)
                         logger.info(f"Modifed {entity_type} {entity_name}")
                 else: 
                     for entity_name in [item for sublist in list(dependencies[entity_type].values()) for item in sublist]:
+                        if entity_name in processed[entity_type]:
+                            continue
+                        processed[entity_type].append(entity_name)
+
                         entity = self.parent.get_entity(entity_type, entity_name)
                         if entity:
                             entity.replace_data_fragment(f"""{old_name}""", f"""{new_name}""",api_update)
