@@ -24,7 +24,7 @@ class Entity():
         self.dependency_check_id = data.get("name")
         self.dependent_variables = []
         self.dependent_built_in_variables = []
-        dependent_variables = re.findall("{{([A-Za-z0-9-_\s\.\/]+)}}", json.dumps(self.data))
+        dependent_variables = re.findall("{{([^{}\\]+?)}}", json.dumps(self.data))
 
         if len(dependent_variables) > 0:
             for variable in dependent_variables:
