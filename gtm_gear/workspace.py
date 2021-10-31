@@ -3,6 +3,7 @@ from .built_in_variable import BuiltInVariable
 from .folder import Folder
 from .variable import Variable
 from .trigger import Trigger
+from .template import Template
 from .tag import Tag
 from .container import Container
 import os
@@ -34,6 +35,9 @@ ENTITY_CONFIG = {
     }, 'folders': {
         'className': 'Folder',
         'key': 'folder'
+    }, 'templates': {
+        'className': 'Template',
+        'key': 'template'
     }
 
 }
