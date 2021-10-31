@@ -72,7 +72,7 @@ class Entity():
                         processed[entity_type].append(entity_name)
                         
                         entity = self.parent.get_entity(entity_type, entity_name)
-                        entity.replace_data_fragment(f"{{{{{old_name}}}}}", f"{{{{{new_name}}}}}",api_update)
+                        entity.replace_data_fragment(f"{{{{{re.escape(old_name)}}}}}", f"{{{{{new_name}}}}}",api_update)
                         logger.info(f"Modifed {entity_type} {entity_name}")
                 else: 
                     for entity_name in [item for sublist in list(dependencies[entity_type].values()) for item in sublist]:
@@ -82,7 +82,7 @@ class Entity():
 
                         entity = self.parent.get_entity(entity_type, entity_name)
                         if entity:
-                            entity.replace_data_fragment(f"""{old_name}""", f"""{new_name}""",api_update)
+                            entity.replace_data_fragment(f"""{re.escape(old_name)}""", f"""{new_name}""",api_update)
                             # entity.replace_data_fragment(f"'{old_name}'", f"'{new_name}'",api_update)
                             logger.info(f"Modifed {entity_type} {entity_name}")
 
