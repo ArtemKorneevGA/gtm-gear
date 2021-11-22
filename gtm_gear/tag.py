@@ -65,3 +65,11 @@ class Tag(Entity):
         if "paused" in self.data.keys() and self.data['paused']:
             return True
         return False
+
+    def pause(self):
+        self.data['paused'] = True
+        self.update()
+
+    def unpause(self):
+        self.data['paused'] = False
+        self.update()
