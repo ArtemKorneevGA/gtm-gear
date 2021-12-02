@@ -92,3 +92,7 @@ class Container():
                 .get(path=version_path)
         ))
 
+    def get_live_version(self, version_path):
+        return (self.service.execute(getattr(self.gtmservice.accounts().containers(), 'versions')()
+                .live(parent=self.container["path"])
+        ))
