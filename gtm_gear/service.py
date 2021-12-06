@@ -52,14 +52,15 @@ class Service:
             self.gtmservice = self.getService()
         
         else:
-            if "service_account_file" in credentials:
-                credentials = service_account.Credentials.from_service_account_file(
-                credentials["service_account_file"], scopes=self.scope)
-            else:
-                # Load credentials from the session.
-                credentials = google.oauth2.credentials.Credentials(
-                    **credentials
-                )
+            if isinstance(credentials, dict):
+                if "service_account_file" in credentials:
+                    credentials = service_account.Credentials.from_service_account_file(
+                    credentials["service_account_file"], scopes=self.scope)
+                else:
+                    # Load credentials from the session.
+                    credentials = google.oauth2.credentials.Credentials(
+                        **credentials
+                    )
 
             self.gtmservice  = googleapiclient.discovery.build(
                 self.api_name, self.api_version, credentials=credentials
