@@ -7,6 +7,7 @@ from oauth2client import file
 from oauth2client import tools
 
 import google.oauth2.credentials
+from google.oauth2 import service_account
 import googleapiclient.discovery
 
 
@@ -35,6 +36,8 @@ class Service:
             "https://www.googleapis.com/auth/tagmanager.edit.containers"
         ]
 
+     
+        # If client_secrets provided
         if credentials is None:
             self.client_secrets_path = os.path.join(
                 self.config_folder, "client_secrets.json"
@@ -49,10 +52,14 @@ class Service:
             self.gtmservice = self.getService()
         
         else:
-            # Load credentials from the session.
-            credentials = google.oauth2.credentials.Credentials(
-                **credentials
-            )
+            if "service_account_file" in credentials:
+                credentials = service_account.Credentials.from_service_account_file(
+                credentials["service_account_file"], scopes=self.scope)
+            else:
+                # Load credentials from the session.
+                credentials = google.oauth2.credentials.Credentials(
+                    **credentials
+                )
 
             self.gtmservice  = googleapiclient.discovery.build(
                 self.api_name, self.api_version, credentials=credentials
