@@ -36,7 +36,10 @@ class Service:
             "https://www.googleapis.com/auth/tagmanager.edit.containers"
         ]
 
-     
+        self.requests = REQUESTS_PER_PERIOD
+        self.period  = REQUESTS_PERIOD        
+        self.execute = sleep_and_retry(limits(calls=self.requests, period=self.period)(self.execute_method))
+
         # If client_secrets provided
         if credentials is None:
             self.client_secrets_path = os.path.join(
@@ -68,10 +71,6 @@ class Service:
 
         self.cache = Cache(self.config_folder, self.cache_prefix)
 
-
-
-
-
     def getService(self):
         if not self.http:
             flow = client.flow_from_clientsecrets(
@@ -95,10 +94,9 @@ class Service:
         return self.cache.get_cache(entity, cache)
 
     def set_ratelimit(self, requests, period):
-        global REQUESTS_PER_PERIOD
-        global REQUESTS_PERIOD
-        REQUESTS_PER_PERIOD = requests
-        REQUESTS_PERIOD = period
+        self.requests = requests
+        self.period  = period
+        self.execute = sleep_and_retry(limits(calls=self.requests, period=self.period)(self.execute_method))
 
     def get_accounts(self,cache =True):
         def requests_accounts(service):
@@ -167,7 +165,5 @@ class Service:
     def update_cache(self, entity_type, entity_path, data):
         self.cache.update_cache(entity_type, entity_path, data)
 
-    @sleep_and_retry
-    @limits(calls=REQUESTS_PER_PERIOD, period=REQUESTS_PERIOD)
-    def execute(self, object):
+    def execute_method(self, object):
         return object.execute()

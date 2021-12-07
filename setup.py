@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='gtm_gear',
-    version='0.0.2',
+    version='0.0.3',
     author='Artem Korneev',
     author_email='dev.dandp@gmail.com',
     description='Automate everyday Google Tag Manager tasks.',
