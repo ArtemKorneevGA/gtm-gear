@@ -173,8 +173,17 @@ class Workspace():
         if entity_type not in ENTITY_CONFIG.keys():
             raise ValueError(f"Can't create entity by type: {entity_type}")
 
-        entity = self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), entity_type)().create(parent=self.path,body=data))
-        logger.info(f"{entity_type} added: {data['name']}")
+        if entity_type == 'built_in_variables':
+            self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), entity_type)().create(parent=self.path,type=data))
+            built_in_variables_new = self.get_list("built_in_variables")
+            try:
+                entity = [bv for bv in built_in_variables_new["builtInVariable"] if bv['type']== data][0]     
+            except Exception as e:
+                print("Can't get just created builtInVariable")
+                entity= {}
+        else:
+            entity = self.service.execute(getattr(self.gtmservice.accounts().containers().workspaces(), entity_type)().create(parent=self.path,body=data))
+        logger.info(f"{entity_type} added")
         object = globals()[ENTITY_CONFIG[entity_type]['className']]
         entity_object = object(entity, self)
         
