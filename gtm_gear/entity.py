@@ -17,8 +17,8 @@ class Entity():
         self.parent = parent
         self.data = data
         self.name = data.get("name")
-        # self.type = camel_case(data.get("type"))
-        self.type = data.get("type")
+        self.type = camel_case(data.get("type"))
+        # self.type = data.get("type")
         self.path = data.get("path")
         self.parameter = data.get("parameter")
 
@@ -105,7 +105,7 @@ class Entity():
 
     def get_template_name(self):
         for param in self.parameter:
-            if param["type"] == "template" and param["key"] == "name":
+            if param["type"].lower() == "template" and param["key"] == "name":
                 return param["value"]
 
     def get_param(self, param_key, param_type='template'):
@@ -133,7 +133,7 @@ class Entity():
     def get_template_param(self, param_name):
         if self.parameter:
             for param in self.parameter:
-                if param["type"] == "template" and param["key"] == param_name:
+                if param["type"].lower() == "template" and param["key"] == param_name:
                     return param["value"]
     
 

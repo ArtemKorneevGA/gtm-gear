@@ -52,13 +52,13 @@ class Tag(Entity):
  
     def is_ua_ecommerce(self):
         for param in self.parameter:
-            if param["type"] == "boolean" and param["key"] == "enableEcommerce":
+            if param["type"].lower() == "boolean" and param["key"] == "enableEcommerce":
                 return True if param["value"] == 'true' else False     
         return False
 
     def set_html(self, value):
         for param in self.parameter:
-            if param["type"] == "template" and param["key"] == "html":
+            if param["type"].lower() == "template" and param["key"] == "html":
                 param["value"] = value
 
     def isPaused(self):

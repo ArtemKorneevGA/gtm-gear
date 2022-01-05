@@ -29,5 +29,5 @@ class Trigger(Entity):
     def get_custom_event_template_param(self, param_name):
         if 'customEventFilter' in self.data:
             for param in self.data['customEventFilter'][0]['parameter']:
-                if param["type"] == "template" and param["key"] == param_name:
+                if param["type"].lower() == "template" and param["key"] == param_name:
                     return param["value"]
