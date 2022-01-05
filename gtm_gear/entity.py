@@ -17,7 +17,8 @@ class Entity():
         self.parent = parent
         self.data = data
         self.name = data.get("name")
-        self.type = camel_case(data.get("type"))
+        # self.type = camel_case(data.get("type"))
+        self.type = data.get("type")
         self.path = data.get("path")
         self.parameter = data.get("parameter")
 

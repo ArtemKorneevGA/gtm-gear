@@ -1,6 +1,8 @@
 def camel_case(snake):
     if not snake:
         return snake
+    if snake.startswith("cvt_"):
+        return snake
     if "_" in snake:
         words = snake.split("_")
         res = ''
