@@ -47,7 +47,7 @@ class Tag(Entity):
  
     def get_ua_type(self):
         for param in self.parameter:
-            if param["type"] == "template" and param["key"] == "trackType":
+            if param["type"].lower()  == "template" and param["key"] == "trackType":
                 return param["value"]
  
     def is_ua_ecommerce(self):
