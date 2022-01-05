@@ -1,5 +1,8 @@
 import logging, time, json, re
+from .utils import camel_case
+
 logger = logging.getLogger(__name__)
+
 
 
 # https://support.google.com/tagmanager/answer/7182738?hl=en
@@ -14,7 +17,7 @@ class Entity():
         self.parent = parent
         self.data = data
         self.name = data.get("name")
-        self.type = data.get("type")
+        self.type = camel_case(data.get("type"))
         self.path = data.get("path")
         self.parameter = data.get("parameter")
 
