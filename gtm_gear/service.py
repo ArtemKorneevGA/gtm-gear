@@ -23,7 +23,7 @@ REQUESTS_PERIOD = 60
 SLEEP_TIME_DEFAULT = 6
 
 class Service:
-    def __init__(self, credentials= None, cache_prefix='', http = None):
+    def __init__(self, credentials= None, cache_prefix='', http = None, requestBuilder = None):
         if "GTM_API_CONFIG_FOLDER" in os.environ:
             self.config_folder = os.environ["GTM_API_CONFIG_FOLDER"]
         else:
@@ -52,6 +52,7 @@ class Service:
             self.file_extension = "json"
             self.storage_path = os.path.join(self.config_folder, "tagmanager.dat")
             self.http = http
+            self.requestBuilder = requestBuilder
             self.gtmservice = self.getService()
         
         else:
@@ -85,8 +86,12 @@ class Service:
             self.http = credentials.authorize(http=httplib2.Http())
 
         # Build the service object.
-        service = build(self.api_name, self.api_version, http=self.http, cache_discovery=False)
-        service.debug = False
+        if self.requestBuilder:
+            service = build(self.api_name, self.api_version, http=self.http, requestBuilder=self.requestBuilder, cache_discovery=False)
+            service.debug = True
+        else:
+            service = build(self.api_name, self.api_version, http=self.http, cache_discovery=False)
+            service.debug = False
 
         return service
 
