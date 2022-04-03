@@ -15,13 +15,7 @@ class Entity():
         self.service = parent.service
         self.gtmservice = parent.gtmservice
         self.parent = parent
-        self.data = data
-        self.name = data.get("name")
-        self.type = camel_case(data.get("type"))
-        # self.type = data.get("type")
-        self.path = data.get("path")
-        self.parameter = data.get("parameter")
-
+        self.set_data(data)
         # Param for buit in variables
         self.path_additional_params = {}
 
@@ -39,6 +33,12 @@ class Entity():
                         self.dependent_variables.append(variable)
 
 
+    def set_data(self, data):
+        self.data = data
+        self.name = data.get("name")
+        self.type = camel_case(data.get("type"))
+        self.path = data.get("path")
+        self.parameter = data.get("parameter")
 
 
     def update(self):
@@ -49,7 +49,7 @@ class Entity():
     def replace_data_fragment(self, old_text, new_text, api_update=True):
         try:
             changed_data = re.sub(old_text, new_text, json.dumps(self.data))
-            self.data = json.loads(changed_data)
+            self.set_data(json.loads(changed_data))
             if api_update:
                 self.update()
             else:
