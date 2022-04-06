@@ -22,8 +22,12 @@ class Entity():
         self.dependency_check_id = data.get("name")
         self.dependent_variables = []
         self.dependent_built_in_variables = []
-        dependent_variables = re.findall("{{([^{}\\\]+?)}}", json.dumps(self.data))
+        self.set_dependent_variables()
 
+    def set_dependent_variables(self):
+        self.dependent_built_in_variables = []
+        self.dependent_variables = []
+        dependent_variables = re.findall("{{([^{}\\\]+?)}}", json.dumps(self.data))
         if len(dependent_variables) > 0:
             for variable in dependent_variables:
                 if variable != "_event":
@@ -31,7 +35,6 @@ class Entity():
                         self.dependent_built_in_variables.append(variable)
                     else:
                         self.dependent_variables.append(variable)
-
 
     def set_data(self, data):
         self.data = data
@@ -63,7 +66,6 @@ class Entity():
         processed['tags']=[]
         processed['variables']=[]
         processed['triggers']=[]
-
         dependencies = self.get_depended()
         if dependencies['len']>0:
             for entity_type in dependencies.keys():
@@ -78,6 +80,7 @@ class Entity():
                         entity = self.parent.get_entity(entity_type, entity_name)
                         entity.replace_data_fragment(f"{{{{{re.escape(old_name)}}}}}", f"{{{{{new_name}}}}}",api_update)
                         logger.info(f"Modifed {entity_type} {entity_name}")
+                        entity.set_dependent_variables()
                 else: 
                     for entity_name in [item for sublist in list(dependencies[entity_type].values()) for item in sublist]:
                         if entity_name in processed[entity_type]:
@@ -89,6 +92,7 @@ class Entity():
                             entity.replace_data_fragment(f"""{re.escape(old_name)}""", f"""{new_name}""",api_update)
                             # entity.replace_data_fragment(f"'{old_name}'", f"'{new_name}'",api_update)
                             logger.info(f"Modifed {entity_type} {entity_name}")
+                            entity.set_dependent_variables()
 
 
     def delete(self, do_check = True):

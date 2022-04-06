@@ -6,3 +6,4 @@ from .tag import Tag
 from .trigger import Trigger
 from .variable import Variable
 from .folder import Folder
+from .template import Template
